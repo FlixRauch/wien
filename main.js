@@ -17,4 +17,17 @@ let map = L.map("map", {
 
 let layerControl = L.control.layers({
     "BasemapAT Grau" : startLayer,
+    "Basemap Standard" : L.tileLayer.provider("BasemapAT.grau"),
+    "Basemap Terrain" : L.tileLayer.provider("BasemapAT.terrain"),
+    "Basemap Surface" : L.tileLayer.provider("BasemapAT.surface"),
+    "Basemap Beschriftung" : L.tileLayer.provider("BasemapAT.overlay"),
+    "Basemap Orthofoto" : L.tileLayer.provider("BasemapAT.orthofoto"),
+    "Kombiniert" : L.layerGroup([L.tileLayer.provider("BasemapAT.orthofoto"),
+    L.tileLayer.provider("BasemapAT.overlay")])
 }).addTo(map)
+
+let sightLayer = L.featureGroup();
+
+layerControl.addOverlay(sightLayer, "Sehenswürdigkeiten");
+
+let mrk = L.marker([stephandsdom.lat, stephansdom.lng]).addTo(sightLayer)
