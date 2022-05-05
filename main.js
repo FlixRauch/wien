@@ -49,10 +49,11 @@ var miniMap = new L.Control.MiniMap(
 ).addTo(map);
 
 // async heißt code läuft weiter bis Funktion fertig ist
+//Sehenswüdigkeiten
 async function loadSites(url) {
     let response = await fetch(url);
     let geojson = await response.json(url)
-    console.log(geojson);
+    //console.log(geojson);
 
     let overlay = L.featureGroup();
 
@@ -62,6 +63,19 @@ async function loadSites(url) {
     L.geoJSON(geojson).addTo(overlay);
 }
 
+//Bishaltestellen
+async function loadStops(url) {
+    let response = await fetch(url);
+    let geojson = await response.json(url)
+    //console.log(geojson);
 
+    let overlay = L.featureGroup();
+
+    layerControl.addOverlay(overlay, "Haltestellen Vienna Sightseeing");
+    overlay.addTo(map);
+
+    L.geoJSON(geojson).addTo(overlay);
+}
 
 loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json")
+loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json")
