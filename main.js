@@ -9,7 +9,7 @@ let stephansdom = {
 let startLayer = L.tileLayer.provider("BasemapAT.basemap")
 let map = L.map("map", {
     center: [stephansdom.lat, stephansdom.lng],
-    zoom: 12,
+    zoom: 14,
     layers: [
         startLayer
     ]
@@ -94,7 +94,22 @@ async function loadStops(url) {
     layerControl.addOverlay(overlay, "Haltestellen Vienna Sightseeing");
     overlay.addTo(map);
 
-    L.geoJSON(geojson).addTo(overlay);
+    L.geoJSON(geojson, {
+        pointToLayer: function(geoJsonPoint, latlng) {
+            //L.marker(latlng).addTo(map)
+            let popup = `
+            <strong>${geoJsonPoint.properties.LINE_NAME}</strong><br>
+            Station ${geoJsonPoint.properties.STAT_NAME}
+            `;
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/bus.png",
+                    iconAnchor: [16,37],
+                    popupAnchor: [0,-37]
+                })
+            }).bindPopup(popup);
+        }
+    }).addTo(overlay);
 }
 
 //Buslinien
@@ -140,7 +155,7 @@ async function loadHotels(url) {
 }
 
 loadSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json")
-//loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json")
+loadStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json")
 //loadLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json")
 //loadZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json")
 //loadHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json")
