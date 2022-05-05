@@ -54,7 +54,12 @@ async function loadSites(url) {
     let geojson = await response.json(url)
     console.log(geojson);
 
-    L.geoJSON(geojson).addTo(map);
+    let overlay = L.featureGroup();
+
+    layerControl.addOverlay(overlay, "Sehenswürdigkeiten");
+    overlay.addTo(map);
+
+    L.geoJSON(geojson).addTo(overlay);
 }
 
 
