@@ -3,7 +3,7 @@
 let stephansdom = {
     lat:48.208493,
     lng:16.373118,
-    title: "Sephansdom"
+    title: "Stephansdom"
 }
 
 let startLayer = L.tileLayer.provider("BasemapAT.basemap")
@@ -22,7 +22,7 @@ let layerControl = L.control.layers({
     "Basemap Surface" : L.tileLayer.provider("BasemapAT.surface"),
     "Basemap Beschriftung" : L.tileLayer.provider("BasemapAT.overlay"),
     "Basemap Orthofoto" : L.tileLayer.provider("BasemapAT.orthofoto"),
-    "Kombiniert" : L.layerGroup([L.tileLayer.provider("BasemapAT.orthofoto"),
+    "Basemap Orthofoto mit Beschriftung" : L.layerGroup([L.tileLayer.provider("BasemapAT.orthofoto"),
     L.tileLayer.provider("BasemapAT.overlay")])
 }).addTo(map)
 
@@ -30,4 +30,18 @@ let sightLayer = L.featureGroup();
 
 layerControl.addOverlay(sightLayer, "Sehenswürdigkeiten");
 
-let mrk = L.marker([stephandsdom.lat, stephansdom.lng]).addTo(sightLayer)
+let mrk = L.marker([stephansdom.lat, stephansdom.lng]).addTo(sightLayer)
+
+sightLayer.addTo(map);
+
+L.control.scale({
+    imperial: false
+}).addTo(map);
+
+L.control.fullscreen().addTo(map)
+
+var miniMap = new L.Control.MiniMap(
+    L.tileLayer.provider("BasemapAT.grau"), {
+        toggleDisplay: true
+    }
+).addTo(map);
