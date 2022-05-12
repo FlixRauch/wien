@@ -138,7 +138,9 @@ async function loadLines(url) {
             };
             return {
                 color: `${colors[feature.properties.LINE_NAME]}`,
+                //Dicke 
                 weight: 4,
+                //gestrichelt 
                 dashArray: [15,7]
             }
         }
@@ -164,14 +166,33 @@ async function loadZones(url) {
     layerControl.addOverlay(overlay, "Fußgängerzonen");
     overlay.addTo(map);
 
-    L.geoJSON(geojson).addTo(overlay);
+    L.geoJSON(geojson, {
+        style: function(feature){
+            return {
+                color: "#F012BE",
+                opacity: 0.1,
+                //Fläche füllen 
+                fill: true,
+                //Transparenz von Füllung 
+                fillOpacity: 0.1
+            }}
+        }).bindPopup(function (layer) {
+        return `
+            <h4>${layer.feature.properties.ADRESSE}</h4>
+            Zeitraum: <br>
+             ${layer.feature.properties.ZEITRAUM || ""}
+            <br>
+            ausgenommen: <br> ${layer.feature.properties.AUSN_TEXT || ""}
+        `;
+        //return layer.feature.properties.LINE_NAME;
+    }).addTo(overlay);
 }
 
 //Hotels und Unterkünfte
 async function loadHotels(url) {
     let response = await fetch(url);
     let geojson = await response.json(url)
-    //console.log(geojson);
+    
 
     let overlay = L.featureGroup();
 
